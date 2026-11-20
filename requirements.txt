@@ -18,3 +18,12 @@ jinja2>=3.1.0
 # pvlib provides the NREL SPA solar position algorithm (Reda & Andreas 2004),
 # the Ineichen-Perez clear-sky model, and irradiance transposition.
 pvlib>=0.11.0
+
+# Phase 3 — BIM / IFC parsing
+# 0.8.1 is pinned deliberately: the 0.9.x wheels are built against
+# GLIBCXX_3.4.29 and fail to import on hosts whose libstdc++ tops out at 3.4.28.
+# 0.8.1 is built against an older toolchain and imports on a much wider range.
+ifcopenshell==0.8.1
+
+# Required by FastAPI for multipart file uploads (BIM .ifc upload)
+python-multipart>=0.0.1

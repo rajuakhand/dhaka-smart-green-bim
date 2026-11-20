@@ -165,8 +165,14 @@ def run_full_analysis(
     else:
         overall = ConfidenceLevel.LOW.value
 
+    # Normalise the id to a plain string: persisted buildings carry a UUID,
+    # preview buildings have none. Coerce explicitly so Pydantic never sees a
+    # UUID object where a str is declared.
+    raw_id = getattr(building, "id", None)
+    project_id = str(raw_id) if raw_id is not None else "preview"
+
     return CalculationEnvelope(
-        project_id=getattr(building, "id", None) or "preview",
+        project_id=project_id,
         calculated_at=datetime.now(timezone.utc),
         modules={
             "A_building": building_ctx,

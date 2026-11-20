@@ -36,11 +36,10 @@ Thumbs.db
 # Docker
 docker-compose.override.yml
 
-# Data (keep source_registry.csv, but ignore large data files)
-data/weather/*.epw
-data/weather/*.zip
+# Uploaded BIM files (user content, never committed)
+data/uploads/
 
-# Frontend (when added)
+# Frontend
 node_modules/
 .next/
 out/

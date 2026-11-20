@@ -63,6 +63,7 @@ Help architects, engineers, developers, and researchers assess building design p
 - **Backend**: FastAPI, SQLAlchemy + PostGIS, Pydantic v2
 - **Calculations**: Isolated pure functions, 100% unit-tested with reference values
 - **Phase 2**: pvlib (NREL SPA solar position, Ineichen-Perez clear-sky), CIBSE/BRE daylight factor, ISO 6946 U-values, NASA POWER climate API
+- **Phase 3**: IfcOpenShell 0.8.1 (IFC parsing, unit scaling, swept-solid geometry, geometry validation, IFC→analysis model)
 - **Data**: EPW cached locally, emission factors seeded, source registry CSV, NASA POWER cached in `data/climate/`
 
 ---
@@ -121,9 +122,7 @@ cd web && npm install && npm run dev
 ---
 
 ## 📖 Documentation
-
 | Document | Description |
-|----------|-------------|
 | [Feasibility Analysis](docs/01_feasibility_analysis.md) | Technical, regulatory, data feasibility |
 | [Detailed MVP Scope](docs/02_detailed_mvp_scope.md) | All modules, pages, data dictionary |
 | [Excluded Features](docs/03_excluded_features.md) | What's NOT in MVP with rationale |
@@ -136,6 +135,35 @@ cd web && npm install && npm run dev
 | [Development Roadmap](docs/10_development_roadmap.md) | 18-month phased plan |
 | [Folder Structure](docs/11_initial_folder_structure.md) | Repository layout |
 | [Testing Plan](docs/12_testing_validation_plan.md) | Unit, integration, E2E, regression |
+
+---
+
+## 🔌 API Reference
+
+All endpoints are prefixed with `/api/v1`. Interactive docs at `/docs`.
+
+| Method | Path | Purpose |
+|--------|------|---------|
+| GET | `/health` | Liveness |
+| GET | `/sources` | Verified source registry |
+| POST | `/projects` | Create project |
+| POST | `/projects/{id}/rooms` | Add rooms |
+| POST | `/projects/{id}/calculate` | Phase 1 full analysis |
+| GET | `/projects/{id}/report?format=html` | HTML report |
+| GET | `/phase2/simulation-capability` | Engine availability (honest) |
+| GET | `/phase2/climate` | NASA POWER climate normals |
+| POST | `/phase2/solar` | Solar geometry + facade exposure |
+| POST | `/phase2/daylight` | CIBSE/BRE daylight factor |
+| POST | `/phase2/shading` | Geometric shading analysis |
+| POST | `/phase2/sensitivity` | One-at-a-time sensitivity |
+| GET | `/phase2/materials` | ISO 6946 U-value database |
+| POST | `/phase2/envelope` | Area-weighted envelope U-value |
+| POST | `/phase2/projects/{id}/run` | Full Phase 2 analysis |
+| GET | `/bim/capability` | IfcOpenShell availability |
+| POST | `/bim/upload` | Upload an `.ifc` file |
+| POST | `/bim/analyze` | Parse + validate + convert |
+| POST | `/bim/projects/{id}/import` | Import IFC rooms into a project |
+| GET | `/bim/schemas` | Supported IFC schemas and entities |
 
 ---
 
@@ -198,13 +226,46 @@ published methods. **No external simulation engine required** for these modules.
 > platform reports them as unavailable and marks the corresponding results
 > **"Not evaluated"** — never "Simulated".
 
-### Phase 3 — BIM Integration (📅 Planned)
-| Sprint | Focus | Deliverables | Status |
-|--------|-------|--------------|--------|
-| 3.1 | IFC upload + validation | Secure upload, size/type checks | ✅ Placeholder Ready |
-| 3.2 | BIM geometry extraction | IfcOpenShell parsing, wall/floor/roof/window extraction | ✅ Placeholder Ready |
-| 3.3 | Geometry validation | Consistency checks | ✅ Placeholder Ready |
-| 3.4 | IFC-to-analysis model | Normalized room/space data | ✅ Placeholder Ready |
+### Phase 3 — BIM Integration (✅ Complete)
+Real IFC parsing via IfcOpenShell 0.8.1, with geometry validation and conversion
+into the platform's analysis model. A BIM room flows straight into the Phase 1
+and Phase 2 engines.
+
+| Capability | Method | Status |
+|------------|--------|--------|
+| IFC upload (multipart, allowlisted, size-capped, name-sanitised) | FastAPI UploadFile | ✅ Complete |
+| Schema detection | IFC2X3 / IFC4 / IFC4X3 | ✅ Complete |
+| Unit scaling (mm → m) | IfcUnitAssignment parsing | ✅ Complete |
+| Space / wall / slab / roof / window / door extraction | IfcOpenShell `by_type` | ✅ Complete |
+| Geometry measurement | `IfcExtrudedAreaSolid` swept solids | ✅ Complete |
+| Geometry validation (6 error + 4 warning + 2 note checks) | `validator.py` | ✅ Complete |
+| IFC → analysis room model | `converter.py` | ✅ Complete |
+| Room-type inference from space names | keyword map, flagged when unmatched | ✅ Complete |
+| BIM → Phase 1 → Phase 2 → Report pipeline | API integration | ✅ Complete |
+| Phase 3 UI (`/bim`) | upload + model summary + rooms table | ✅ Complete |
+| 47 Phase 3 tests | `tests/test_bim.py` | ✅ 292 total passing |
+
+**Two IFC fixtures, both locked to the same metric result** (`tests/fixtures/`):
+- `sample_m.ifc` — length unit METRE, coordinates in metres
+- `sample_mm.ifc` — length unit MILLI METRE, coordinates in millimetres
+
+Both must parse to identical metric values. This guards against the classic
+"room is 1000× too small" IFC bug:
+```
+sample_m.ifc    footprint=21.15 m²  room=20.0 m²  wall area=54.0 m²
+sample_mm.ifc   footprint=21.15 m²  room=20.0 m²  wall area=54.0 m²
+```
+
+> **Engineering bug caught by these tests:** the initial footprint calculation
+> added `max(x_dim, y_dim)` to each wall origin, which over-counted walls whose
+> profile length runs along Y. A 5×4 m room reported a 76.9 m² footprint instead
+> of 21.15 m². Fixed to a component-wise bounding box.
+
+> **IfcOpenShell 0.8.1 is pinned on purpose.** The 0.9.x wheels are built
+> against `GLIBCXX_3.4.29`; on hosts whose `libstdc++` stops at 3.4.28 (this
+> one) they install but fail to import. 0.8.1 works on a much wider range of
+> hosts. If IfcOpenShell is unavailable, every BIM endpoint returns
+> `{"executed": false, "status": "Not evaluated"}` — never fabricated model data.
 
 ### Phase 4 — Advanced Simulation (📅 Future)
 | Sprint | Focus | Deliverables |
@@ -218,7 +279,7 @@ published methods. **No external simulation engine required** for these modules.
 ## 🧪 Testing
 
 ```bash
-# Backend (245 tests, all passing)
+# Backend (292 tests, all passing)
 pytest tests/ -v --cov=src --cov-report=term-missing
 
 # Frontend typecheck
@@ -231,6 +292,7 @@ ruff check src/
 
 **Phase 1 Gate**: 100% formula coverage, all reference values pass, zero security HIGH/CRITICAL.
 **Phase 2 Gate**: 245 tests passing including 162 Phase 2 reference tests.
+**Phase 3 Gate**: 292 tests passing including 47 Phase 3 BIM tests.
 
 ---
 

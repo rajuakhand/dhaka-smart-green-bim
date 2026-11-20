@@ -24,6 +24,7 @@ dependencies = [
     "watchfiles>=0.21.0",
     "jinja2>=3.1.0",
     "pvlib>=0.11.0",
+    "ifcopenshell==0.8.1",
 ]
 
 [project.optional-dependencies]
@@ -40,8 +41,8 @@ simulation = [
     "pyenergyplus",
 ]
 bim = [
-    # Phase 3: IFC parsing.
-    "ifcopenshell",
+    # Phase 3: IFC parsing (also a core dependency; kept here for clarity).
+    "ifcopenshell==0.8.1",
 ]
 
 [project.urls]
