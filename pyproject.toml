@@ -1,12 +1,12 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "dhaka-smart-green-bim"
 version = "0.1.0"
 description = "DhakaSmart Urban Density & Green BIM — Bangladesh Climate-Aware Building Performance & Space Optimization Platform"
-requires-python = ">=3.11"
+requires-python = ">=3.8"
 dependencies = [
     "fastapi>=0.110.0",
     "uvicorn[standard]>=0.27.0",
@@ -25,41 +25,38 @@ dependencies = [
     "jinja2>=3.1.0",
 ]
 
-optional-dependencies = {
-    "dev": [
-        "pytest>=8.0.0",
-        "pytest-asyncio>=0.23.0",
-        "httpx[http2]>=0.26.0",
-        "ruff>=0.5.0",
-        "mypy>=1.10.0",
-    ],
-    "simulation": [
-        "energyplus-api",
-        "radiance-engine",
-    ],
-    "bim": [
-        "ifcopenshell",
-    ],
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0.0",
+    "pytest-asyncio>=0.23.0",
+    "httpx[http2]>=0.26.0",
+    "ruff>=0.5.0",
+    "mypy>=1.10.0",
+]
+simulation = [
+    "energyplus-api",
+    "radiance-engine",
+]
+bim = [
+    "ifcopenshell",
 ]
 
-project-urls = {
-    "Homepage": "https://github.com/rajuakhand/dhaka-smart-green-bim",
-    "Documentation": "https://github.com/rajuakhand/dhaka-smart-green-bim/wiki",
-    "Bug Reports": "https://github.com/rajuakhand/dhaka-smart-green-bim/issues",
-}
+[project.urls]
+Homepage = "https://github.com/rajuakhand/dhaka-smart-green-bim"
+Documentation = "https://github.com/rajuakhand/dhaka-smart-green-bim/wiki"
+"Bug Reports" = "https://github.com/rajuakhand/dhaka-smart-green-bim/issues"
 
 [project.scripts]
 dhaka-smart-start = "src.main:main"
 
 [tool.pytest.ini_options]
 testpaths = ["tests/"]
-python_files = ["tests/**/test_*.py"]
-python_classes = []
-python_functions = ["test_*"]
+python_files = "test_*.py"
+python_classes = ["Test*"]
+python_functions = "test_*"
 markers = [
     "calculation",
     "integration",
     "regression",
     "ui",
 ]
-```
