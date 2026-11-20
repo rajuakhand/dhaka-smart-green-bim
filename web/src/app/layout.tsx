@@ -20,6 +20,7 @@ export default function RootLayout({
             </a>
             <div className="hidden md:flex items-center gap-6 text-sm font-medium">
               <a href="/dashboard" className="hover:text-emerald-600 transition-colors">Dashboard</a>
+              <a href="/phase2" className="hover:text-emerald-600 transition-colors">Phase 2</a>
               <a href="/projects/new" className="hover:text-emerald-600 transition-colors">New Project</a>
               <a href="/documentation" className="hover:text-emerald-600 transition-colors">Docs</a>
               <a href="https://github.com/rajuakhand/dhaka-smart-green-bim" target="_blank" className="hover:text-emerald-600 transition-colors">GitHub</a>

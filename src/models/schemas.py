@@ -111,6 +111,10 @@ class BuildingBase(BaseModel):
     building_type: BuildingType
     num_floors: int = Field(ge=1, le=50, description="Storeys above ground")
     floor_to_floor_height_m: float = Field(ge=2.0, le=6.0, description="Floor-to-floor height (m)")
+    orientation_deg: float = Field(
+        default=0.0, ge=0, le=360,
+        description="Primary facade orientation, degrees clockwise from North (0=N, 90=E, 180=S, 270=W)",
+    )
     construction_year: Optional[int] = Field(default=None, ge=1900, le=2100)
     structural_system: Optional[StructuralSystem] = Field(default=None)
     plot_area_m2: Optional[float] = Field(default=None, gt=0, description="Plot area (m²)")

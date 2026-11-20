@@ -13,3 +13,8 @@ pydantic-settings>=2.2.0
 aiofiles>=23.2.1
 watchfiles>=0.21.0
 jinja2>=3.1.0
+
+# Phase 2 — physics-based advanced analysis
+# pvlib provides the NREL SPA solar position algorithm (Reda & Andreas 2004),
+# the Ineichen-Perez clear-sky model, and irradiance transposition.
+pvlib>=0.11.0

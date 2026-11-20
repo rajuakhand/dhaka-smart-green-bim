@@ -59,10 +59,11 @@ Help architects, engineers, developers, and researchers assess building design p
                     └──────────────────┘
 ```
 
-- **Frontend**: Next.js 14, TypeScript, Tailwind CSS, Zustand, SVG visualization
+**Frontend**: Next.js 14, TypeScript, Tailwind CSS, Zustand, SVG visualization
 - **Backend**: FastAPI, SQLAlchemy + PostGIS, Pydantic v2
 - **Calculations**: Isolated pure functions, 100% unit-tested with reference values
-- **Data**: EPW cached locally, emission factors seeded, source registry CSV
+- **Phase 2**: pvlib (NREL SPA solar position, Ineichen-Perez clear-sky), CIBSE/BRE daylight factor, ISO 6946 U-values, NASA POWER climate API
+- **Data**: EPW cached locally, emission factors seeded, source registry CSV, NASA POWER cached in `data/climate/`
 
 ---
 
@@ -157,16 +158,45 @@ cd web && npm install && npm run dev
 | 83 Unit Tests | ✅ All Passing |
 | GitHub Repository | ✅ Published |
 
-### Phase 2 — Advanced Analysis (🔄 In Progress)
-| Sprint | Focus | Deliverables | Status |
-|--------|-------|--------------|--------|
-| 2.1 | Weather-based analysis UI | EPW station selector, climate summary | ✅ Planned |
-| 2.2 | Hourly energy simulation integration | EnergyPlus API bridge (external) | ✅ Placeholder Ready |
-| 2.3 | Advanced daylight (sDA/ASE) | Radiance integration (external) | ✅ Placeholder Ready |
-| 2.4 | Advanced shading | 3D obstruction calculation | ✅ Placeholder Ready |
-| 2.5 | Design optimization (parametric) | DOE / optimization engine | ✅ Placeholder Ready |
-| 2.6 | Sensitivity analysis | Baseline + perturbations | ✅ Placeholder Ready |
-| 2.7 | Embodied carbon (fallback ICMD flagged) | Embodied module | ✅ Planned |
+### Phase 2 — Advanced Analysis (✅ Complete)
+Physics-based engineering calculations using verified astronomical models and
+published methods. **No external simulation engine required** for these modules.
+
+| Module | Method | Status |
+|--------|--------|--------|
+| Climate Data | NASA POWER monthly normals + BMD fallback | ✅ Complete |
+| Solar Geometry | NREL SPA + Ineichen-Perez (pvlib) | ✅ Complete |
+| Solar Heat Gain | Q = A × I × SHGC | ✅ Complete |
+| Daylight Factor | CIBSE/SLL LG10 (BRE method) | ✅ Complete |
+| Shading Analysis | Geometric profile angles | ✅ Complete |
+| Sensitivity Analysis | One-at-a-time perturbation | ✅ Complete |
+| Parametric Optimization | Exhaustive grid search | ✅ Complete |
+| Material Database | ISO 6946 derived U-values | ✅ Complete |
+| Simulation Bridge | Honest engine detection | ✅ Complete |
+| Phase 2 UI (7 pages) | `/phase2/*` | ✅ Complete |
+| 162 additional tests | Phase 2 suite | ✅ 245 total passing |
+
+**Verified reference values** (all test-locked):
+- Dhaka annual mean temp: **25.44 °C** (NASA POWER T2M, 2005–2024)
+- Dhaka extreme max: **43.27 °C** / extreme min: **7.53 °C**
+- Dhaka mean GHI: **4.225 kWh/m²/day**
+- Equinox noon solar altitude: **66.41°** (= 90° − 23.81° latitude)
+- Summer solstice noon altitude: **89.63°** (sun near-overhead at Dhaka)
+- Clear-sky noon GHI: **907.5 W/m²** (Ineichen-Perez)
+- 150 mm brick + plaster wall U-value: **2.413 W/m²K** (ISO 6946)
+- Insulated wall U-value: **0.601 W/m²K**
+- Daylight factor, 3 m² glazing in 5×4×3 m room: **1.687 %**
+- AC COP is the most influential energy input (elasticity −0.543)
+
+> **Engineering correction made during Phase 2:** NASA POWER's `T2M_MAX` /
+> `T2M_MIN` are **extremes**, not mean daily max/min. The initial implementation
+> averaged them to derive mean temperature, which overstated it (33.4 °C vs the
+> correct 25.4 °C). Fixed by using `T2M` (true monthly mean) for mean
+> temperature and CDD, with regression tests locking the correct behaviour.
+
+> **EnergyPlus / Radiance are NOT installed.** Rather than fabricate output, the
+> platform reports them as unavailable and marks the corresponding results
+> **"Not evaluated"** — never "Simulated".
 
 ### Phase 3 — BIM Integration (📅 Planned)
 | Sprint | Focus | Deliverables | Status |
@@ -188,11 +218,11 @@ cd web && npm install && npm run dev
 ## 🧪 Testing
 
 ```bash
-# Backend
+# Backend (245 tests, all passing)
 pytest tests/ -v --cov=src --cov-report=term-missing
 
-# Frontend
-cd web && npm test
+# Frontend typecheck
+cd web && npx tsc --noEmit
 
 # Security
 bandit -r src/
@@ -200,6 +230,7 @@ ruff check src/
 ```
 
 **Phase 1 Gate**: 100% formula coverage, all reference values pass, zero security HIGH/CRITICAL.
+**Phase 2 Gate**: 245 tests passing including 162 Phase 2 reference tests.
 
 ---
 

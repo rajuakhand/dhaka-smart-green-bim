@@ -12,7 +12,7 @@ from __future__ import annotations
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
-from src.api import projects, rooms, calculations, reports
+from src.api import projects, rooms, calculations, reports, phase2
 from src.core.config import settings
 
 app = FastAPI(
@@ -40,6 +40,7 @@ app.include_router(projects.router, prefix=settings.api_prefix, tags=["Projects"
 app.include_router(rooms.router, prefix=settings.api_prefix, tags=["Rooms"])
 app.include_router(calculations.router, prefix=settings.api_prefix, tags=["Calculations"])
 app.include_router(reports.router, prefix=settings.api_prefix, tags=["Reports"])
+app.include_router(phase2.router, prefix=settings.api_prefix, tags=["Phase 2 — Advanced Analysis"])
 
 
 @app.get("/", tags=["Health"])

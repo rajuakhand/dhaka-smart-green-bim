@@ -23,6 +23,7 @@ dependencies = [
     "aiofiles>=23.2.1",
     "watchfiles>=0.21.0",
     "jinja2>=3.1.0",
+    "pvlib>=0.11.0",
 ]
 
 [project.optional-dependencies]
@@ -34,10 +35,12 @@ dev = [
     "mypy>=1.10.0",
 ]
 simulation = [
-    "energyplus-api",
-    "radiance-engine",
+    # Phase 4: install these only when a real simulation workflow is provisioned.
+    # The platform detects them at runtime and reports "Not evaluated" if absent.
+    "pyenergyplus",
 ]
 bim = [
+    # Phase 3: IFC parsing.
     "ifcopenshell",
 ]
 

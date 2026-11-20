@@ -48,7 +48,7 @@ export default function BuildingSetupPage() {
               </div>
               <div>
                 <label className="block text-sm font-medium mb-2">Building Type *</label>
-                <select value="Residential" readOnly className="w-full px-4 py-3 border border-slate-200 bg-slate-50 rounded-lg">
+                <select value="Residential" disabled className="w-full px-4 py-3 border border-slate-200 bg-slate-50 rounded-lg">
                   <option>Residential</option>
                   <option>Mixed-use</option>
                   <option>Office</option>
