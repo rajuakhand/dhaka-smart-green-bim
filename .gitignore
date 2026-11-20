@@ -46,3 +46,8 @@ out/
 
 # Build
 *.log
+
+# Playwright / test artefacts
+test-results/
+playwright-report/
+playwright/.cache/

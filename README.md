@@ -167,6 +167,29 @@ All endpoints are prefixed with `/api/v1`. Interactive docs at `/docs`.
 
 ---
 
+## 🖥️ Frontend Routes
+
+| Route | Purpose |
+|-------|---------|
+| `/` | Landing page |
+| `/dashboard` | Project overview |
+| `/projects/new` | 4-step project wizard (validated client + server side) |
+| `/projects/[id]` | Building setup (info, geometry, materials, site) |
+| `/projects/[id]/rooms` | Room editor with live geometry |
+| `/projects/[id]/floorplan` | SVG floor plan |
+| `/analysis/overview` | Module results summary |
+| `/analysis/{ventilation,daylight,energy,carbon,density,structural}` | Phase 1 module results |
+| `/optimization` | Baseline vs alternatives |
+| `/phase2` | Advanced analysis hub |
+| `/phase2/{climate,solar,daylight,shading,sensitivity,optimization,materials}` | Phase 2 modules |
+| `/bim` | IFC upload, model summary, extracted rooms |
+| `/data-sources` | Verified source registry |
+| `/settings` | Project defaults (emission factor, schedules) |
+| `/report` | Report export |
+| `/documentation` | Methodology and limitations |
+
+---
+
 ## 🚧 Development Roadmap
 
 ### Phase 1 — MVP (✅ Complete)
@@ -282,8 +305,14 @@ sample_mm.ifc   footprint=21.15 m²  room=20.0 m²  wall area=54.0 m²
 # Backend (292 tests, all passing)
 pytest tests/ -v --cov=src --cov-report=term-missing
 
+# Frontend unit tests (33 tests: wizard validation, payload, review rows)
+cd web && npm test
+
 # Frontend typecheck
 cd web && npx tsc --noEmit
+
+# End-to-end UI tests (3 tests, needs a running dev server + backend)
+cd web && BASE_URL=http://localhost:3000 API_URL=http://localhost:8000 npx playwright test
 
 # Security
 bandit -r src/
@@ -292,7 +321,7 @@ ruff check src/
 
 **Phase 1 Gate**: 100% formula coverage, all reference values pass, zero security HIGH/CRITICAL.
 **Phase 2 Gate**: 245 tests passing including 162 Phase 2 reference tests.
-**Phase 3 Gate**: 292 tests passing including 47 Phase 3 BIM tests.
+**Phase 3 Gate**: 292 backend tests + 33 frontend unit tests + 3 E2E tests passing.
 
 ---
 
