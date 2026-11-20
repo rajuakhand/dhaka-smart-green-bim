@@ -90,3 +90,97 @@ def calculate_preview(
         return result
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Calculation failed: {str(e)}")
+
+
+@router.get("/phase2/status")
+def phase2_status():
+    """Check Phase 2 integration status."""
+    from src.modules.phase2_advanced import EnergyPlusIntegration, DaylightAdvanced, AdvancedShading, SensitivityAnalysis
+
+    return {
+        "energyplus": {
+            "status": "not_implemented",
+            "message": "EnergyPlus simulation requires Phase 2 integration with simulation server.",
+            "available": False,
+        },
+        "daylight_advanced": {
+            "status": "not_implemented",
+            "message": "sDA/ASE calculation requires Radiance simulation (Phase 2).",
+            "available": False,
+        },
+        "shading_analysis": {
+            "status": "not_implemented",
+            "message": "Advanced shading analysis requires 3D obstruction geometry (Phase 2).",
+            "available": False,
+        },
+        "sensitivity": {
+            "status": "not_implemented",
+            "message": "Sensitivity analysis is planned for Phase 2.",
+            "available": False,
+        },
+    }
+
+
+@router.get("/phase3/status")
+def phase3_status():
+    """Check Phase 3 integration status."""
+    from src.modules.phase3_bim import IFCImporter, BIMGeometryExtractor, GeometryValidator, IFCToAnalysisModel
+
+    return {
+        "ifc_import": {
+            "status": "not_implemented",
+            "message": "IFC file import requires IfcOpenShell integration (Phase 3).",
+            "available": False,
+        },
+        "geometry_extraction": {
+            "status": "not_implemented",
+            "message": "BIM geometry extraction requires IfcOpenShell integration (Phase 3).",
+            "available": False,
+        },
+        "geometry_validation": {
+            "status": "not_implemented",
+            "message": "Geometry validation requires Phase 3 implementation.",
+            "available": False,
+        },
+        "ifc_conversion": {
+            "status": "not_implemented",
+            "message": "IFC-to-analysis conversion requires Phase 3 implementation.",
+            "available": False,
+        },
+    }
+
+
+@router.post("/phase2/energy-simulation")
+def run_energy_simulation(request: dict):
+    """Run EnergyPlus simulation (Phase 2 placeholder)."""
+    from src.modules.phase2_advanced import EnergyPlusIntegration
+    return EnergyPlusIntegration.run_energy_simulation(
+        building_id=request.get("building_id", "preview"),
+        rooms=request.get("rooms", []),
+        epw_path=request.get("epw_path", "data/weather/Dhaka_419230.epw"),
+    )
+
+
+@router.post("/phase2/daylight-sda")
+def calculate_sda(request: dict):
+    """Calculate sDA/ASE (Phase 2 placeholder)."""
+    from src.modules.phase2_advanced import DaylightAdvanced
+    return DaylightAdvanced.calculate_sda(
+        room_geometry=request.get("room_geometry", {}),
+        epw_path=request.get("epw_path", "data/weather/Dhaka_419230.epw"),
+        materials=request.get("materials", {}),
+    )
+
+
+@router.post("/phase3/import-ifc")
+def import_ifc(request: dict):
+    """Import IFC file (Phase 3 placeholder)."""
+    from src.modules.phase3_bim import IFCImporter
+    return IFCImporter.validate_file(request.get("file_path", ""))
+
+
+@router.post("/phase3/extract-geometry")
+def extract_bim_geometry(request: dict):
+    """Extract BIM geometry from IFC (Phase 3 placeholder)."""
+    from src.modules.phase3_bim import BIMGeometryExtractor
+    return BIMGeometryExtractor.extract_building_elements(request.get("ifc_path", ""))

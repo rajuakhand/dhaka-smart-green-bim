@@ -23,6 +23,8 @@ from src.modules.carbon import calculate_carbon
 from src.modules.density import calculate_density
 from src.modules.structural import screen_structural
 from src.modules.optimization import compare_energy_cases
+from src.modules.phase2_advanced import EnergyPlusIntegration, DaylightAdvanced, AdvancedShading, SensitivityAnalysis
+from src.modules.phase3_bim import IFCImporter, BIMGeometryExtractor, GeometryValidator, IFCToAnalysisModel
 
 # Source references for the full calculation set
 SOURCE_REFERENCES = [
@@ -117,6 +119,35 @@ def run_full_analysis(
         alternatives=alternatives or [],
     )
 
+    # Phase 2 modules (placeholders)
+    phase2_energy = EnergyPlusIntegration.run_energy_simulation(
+        building_id=getattr(building, "id", None) or "preview",
+        rooms=rooms,
+        epw_path="data/weather/Dhaka_419230.epw",
+    )
+    phase2_daylight = DaylightAdvanced.calculate_sda(
+        room_geometry={},
+        epw_path="data/weather/Dhaka_419230.epw",
+        materials={},
+    )
+    phase2_shading = AdvancedShading.analyze_shading(
+        room_geometry={},
+        surrounding_buildings=[],
+        sun_path={},
+    )
+    phase2_sensitivity = SensitivityAnalysis.run_sensitivity(
+        baseline_inputs={},
+        parameters=[],
+    )
+
+    # Phase 3 modules (placeholders)
+    phase3_ifc = IFCToAnalysisModel.convert_to_analysis_model(
+        ifc_path="",
+        target_format="json",
+    )
+    phase3_geometry = GeometryValidator.validate_geometry({})
+    phase3_spaces = BIMGeometryExtractor.extract_spaces("")
+
     # Overall confidence
     confidences = [
         building_ctx.get("confidence", ConfidenceLevel.MEDIUM.value),
@@ -147,6 +178,13 @@ def run_full_analysis(
             "G_density": density,
             "H_structural": structural,
             "I_optimization": optimization,
+            "P2_energy_simulation": phase2_energy,
+            "P2_daylight_advanced": phase2_daylight,
+            "P2_shading_analysis": phase2_shading,
+            "P2_sensitivity": phase2_sensitivity,
+            "P3_ifc_conversion": phase3_ifc,
+            "P3_geometry_validation": phase3_geometry,
+            "P3_space_extraction": phase3_spaces,
         },
         source_references=SOURCE_REFERENCES,
         overall_confidence=overall,

@@ -138,6 +138,53 @@ cd web && npm install && npm run dev
 
 ---
 
+## 🚧 Development Roadmap
+
+### Phase 1 — MVP (✅ Complete)
+| Module | Status |
+|--------|--------|
+| Building Setup (A) | ✅ Complete |
+| Room Analyzer (B) | ✅ Complete |
+| Ventilation Screening (C) | ✅ Complete |
+| Daylight Screening (D) | ✅ Complete |
+| Energy Estimator (E) | ✅ Complete |
+| Carbon Calculator (F) | ✅ Complete |
+| Density & Urban Context (G) | ✅ Complete |
+| Structural Risk Screening (H) | ✅ Complete |
+| Design Optimization (I) | ✅ Complete |
+| FastAPI Backend | ✅ Complete |
+| Next.js Frontend (17 pages) | ✅ Complete |
+| 83 Unit Tests | ✅ All Passing |
+| GitHub Repository | ✅ Published |
+
+### Phase 2 — Advanced Analysis (🔄 In Progress)
+| Sprint | Focus | Deliverables | Status |
+|--------|-------|--------------|--------|
+| 2.1 | Weather-based analysis UI | EPW station selector, climate summary | ✅ Planned |
+| 2.2 | Hourly energy simulation integration | EnergyPlus API bridge (external) | ✅ Placeholder Ready |
+| 2.3 | Advanced daylight (sDA/ASE) | Radiance integration (external) | ✅ Placeholder Ready |
+| 2.4 | Advanced shading | 3D obstruction calculation | ✅ Placeholder Ready |
+| 2.5 | Design optimization (parametric) | DOE / optimization engine | ✅ Placeholder Ready |
+| 2.6 | Sensitivity analysis | Baseline + perturbations | ✅ Placeholder Ready |
+| 2.7 | Embodied carbon (fallback ICMD flagged) | Embodied module | ✅ Planned |
+
+### Phase 3 — BIM Integration (📅 Planned)
+| Sprint | Focus | Deliverables | Status |
+|--------|-------|--------------|--------|
+| 3.1 | IFC upload + validation | Secure upload, size/type checks | ✅ Placeholder Ready |
+| 3.2 | BIM geometry extraction | IfcOpenShell parsing, wall/floor/roof/window extraction | ✅ Placeholder Ready |
+| 3.3 | Geometry validation | Consistency checks | ✅ Placeholder Ready |
+| 3.4 | IFC-to-analysis model | Normalized room/space data | ✅ Placeholder Ready |
+
+### Phase 4 — Advanced Simulation (📅 Future)
+| Sprint | Focus | Deliverables |
+|--------|-------|--------------|
+| 4.1 | EnergyPlus integration (local) | EnergyPlus simulation bridge |
+| 4.2 | Radiance integration | Daylight simulation bridge |
+| 4.3 | CFD integration assessment | Feasibility study, no code in MVP |
+
+---
+
 ## 🧪 Testing
 
 ```bash
