@@ -1,0 +1,21 @@
+source_id,source_type,source_name,source_url,boundary,geography,publisher,date_accessed,version,license,verification_status,notes
+SRC-001,Regulatory,Bangladesh National Building Code (BNBC) 2020,http://uru.gov.bd/attachments/documents/166-1618152305-8.1(b)%20subject%208%20bnbc%202020%20implementation%20and%20enforcement.pdf,Regulations,Bangladesh,MoPHW/RAJUK,2026-11-20,2020,Government-public,Verified,Occupancy Ch 2, Vent Sec 2.14.6.1, Energy Ch 4
+SRC-002,Regulatory,Dhaka Detailed Area Plan (DAP) 2022-2035,https://rajuk.gov.bd/,Master%20Plan,Dhaka,RAJUK/MoPHW,2026-11-20,2022,Government-public,Verified,FAR by zone, ground coverage by plot size
+SRC-003,Regulatory,Dhaka Metropolitan Building Construction Rules 2025 (Draft),https://www.newagebd.net/,Draft,Regulation,Dhaka,MoPHW,2026-11-20,2025,Government-public,Pending-verification,Pending Gazette publication
+SRC-004,Rating,Sustainable And Renewable Energy Development Authority (SREDA) BEEER Guideline v2,https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/,Rating Guideline,Bangladesh,SREDA,2026-11-20,2023,Government-public,Verified,Voluntary rating
+SRC-005,Regulation,Energy Efficiency and Conservation Rules 2016,https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/,Regulation,Bangladesh,SREDA,2026-11-20,2016,Government-public,Verified,Designated consumers, energy audits
+SRC-006,EmissionFactor,Grid Emission Factor (GEF) Bangladesh 2019-22,https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/,Emission Factor,Bangladesh,DoE/MoCC,2026-11-20,2025,Government-public,Verified,0.61-0.62 tCO2/MWh
+SRC-007,EmissionFactor,Grid Emission Factor (GEF) Bangladesh 2013,https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/,Emission Factor,Bangladesh,DoE/MoCC,2026-11-20,2013,Government-public,Verified,0.67 tCO2/MWh
+SRC-008,EmissionFactor,Ember/OWID Electricity Carbon Intensity Bangladesh,https://github.com/owid/energy-data,Emission Factor,Bangladesh,Ember/OWID,2026-11-20,2025,CC-BY-4.0,Verified,0.696 kg CO2e/kWh 2025
+SRC-009,Data,World Bank BEEER Survey 2023,https://documents1.worldbank.org/,Baseline Study,Bangladesh,World%20Bank,2026-11-20,2023,World%20Bank,Partial,30 buildings sample, EPI 42-54 kWh/m2/yr
+SRC-010,Climate,EnergyPlus Weather File (EPW) Dhaka SWERA 419230,https://energyplus.net/weather/,Simulation Input,Dhaka,NREL/DOE,2026-11-20,TMYx,Free,Verified,TMYx, ~8760 rows
+SRC-011,Climate,NASA POWER API,https://power.larc.nasa.gov/,Meteorological,Bangladesh,NASA,2026-11-20,2025,NASA,Verified,Hourly satellite
+SRC-012,Climate,SREDA NSHD Solar Station Dhaka,https://www.nshd.sreda.gov.bd/,Measured,Bangladesh,SREDA,2026-11-20,2024,Government-public,Partial,Single station, Motijheel
+SRC-013,Research,Chaudhary & Akhtar 2023 ICMD factors,https://pubs.acs.org/doi/10.1021/acsenvironau.2c00035,Emission Factor,India,ACS/IFC,2026-11-20,2023,ACS,Verified,78 factors, cradle-to-gate
+SRC-014,Climate,Bangladesh Climate Action Roadmap Buildings,https://globalabc.org/,Roadmap,Bangladesh,GlobalABC/UNEP,2026-11-20,2025,UNEP,Partial,Operational carbon 29.8 MtCO2e
+SRC-015,Rating,SREDA AC Energy Efficiency Benchmark 2021,https://objectstorage.ap-dcc-gazipur-1.oraclecloud15.com/,Market,Bangladesh,SREDA,2026-11-20,2021,Government-public,Partial,EER/COP by AC type
+SRC-016,Regulatory,HBRI Construction Guidelines,https://hbri.gov.bd/,Technical Guideline,Bangladesh,HBRI,2026-11-20,2018,Government-public,Partial,Construction practices
+SRC-017,Industry,RSC Technical Guidelines Bangladesh,https://rsc-bd.org/,Industry,Bangladesh,RMG Sustainability,2026-11-20,2021,NGO-public,Partial,RMG context
+SRC-018,Rating,IFC India Construction Materials Database,https://edgebuildings.com/,Emission Factor,India,IFC,2017,Government-public,Verified,Cradle-to-gate, 78 factors
+SRC-019,EmissionFactor,World Bank Electricity Access / consumption data,https://www.worldbank.org/,Data,Bangladesh,World%20Bank,2026-11-20,2025,Government-public,Partial,Monthly consumption 159 kWh, urban 231 kWh
+SRC-020,Climate,Dhaka Climate Historical Data (BMD),https://en.wikipedia.org/wiki/Climate_of_Dhaka,Climate,Bangladesh,BMD/NOAA,2026-11-20,1991-2020,Public-research,Verified,Monthly normals
